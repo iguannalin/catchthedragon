@@ -40,7 +40,11 @@ body {
   overflow-x: clip;
   width: 350px;
   line-height: 36px;
-  writing-mode: vertical-rl;
+}
+
+#poem div {
+  position: absolute;
+  writing-mode: vertical-lr;
 }
 
 a:active, a:hover, a:focus {
