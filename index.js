@@ -19,7 +19,8 @@ window.addEventListener("load", () => {
   let isDown = true;
   let top = 0;
   let left = 0;
-  let inc = 24;
+  let topInc = 26.583*3;
+  let leftInc = 4.8;
 
   // amazing chengyu data source -- http://thuocl.thunlp.org/
   fetch("https://annaylin.com/100-days/chengyu/THUOCL_chengyu.txt").then((f) => f.text()).then((r) => {
@@ -31,25 +32,22 @@ window.addEventListener("load", () => {
   });
   
   function showPhrase(phrase) { // hehe
-    if (!phrase) return;
+    if (!phrase) return getRandomPhrase();
     let div = document.createElement("div");
     if (!isDown) {
       div.style.writingMode = "horizontal-tb";
-      div.style.top = `${top}px`;
-      div.style.left = `${left += inc}px`;
+      div.style.left = `${left += leftInc}px`;
+      div.style.top = `${top += topInc}px`;
     } else {
-      div.style.left = `${left}px`;
-      div.style.top = `${top += inc}px`;
+      div.style.top = `${top += leftInc}px`;
+      div.style.left = `${left += topInc}px`;
     }
     isDown = !isDown;
-    phrase.split("").forEach((letter, index) => {
-      let span = document.createElement("a");
-      span.innerHTML = letter;
-      if (index == (phrase.length - 1)) span.innerHTML += "  ";
-      span.classList = "grayed";
-      span.onclick = connectWord;
-      div.appendChild(span);
-    });
+    let span = document.createElement("a");
+    span.innerHTML = phrase + "  ";
+    span.onclick = connectWord;
+    span.classList = "grayed";
+    div.appendChild(span);
     console.log({top, left});
     poem.appendChild(div);
   }
@@ -57,8 +55,8 @@ window.addEventListener("load", () => {
   function connectWord(e) {
     e.target.onclick = null;
     e.target.classList.remove("grayed");
-    console.log(e.target);
-    let target = e.target.innerText;
+    let target = e.target.innerText.trim().split("").pop()
+    console.log(target);
     let found = phrases.find((v) => v.startsWith(target) && !foundPhrases.includes(v));
     showPhrase(found);
   }
